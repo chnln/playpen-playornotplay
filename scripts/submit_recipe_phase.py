@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Submit one reconstructed effective training phase; --dry-run never submits."""
+"""Submit one training phase of the recipe; --dry-run never submits."""
 
 import argparse
 from datetime import datetime, timezone
@@ -38,7 +38,7 @@ def prepare(phase_name: str, parent: Path | None, inherited: dict[str, str], tim
     if phase_name != "A":
         word_list = ROOT / "environment/playpen/clembench/wordle/resources/target_words/en/official_recognized_words.txt"
         if not word_list.is_file() or not word_list.read_text().strip():
-            raise ValueError(f"Required Wordle lexicon is missing or empty; complete docs/SETUP.md: {word_list}")
+            raise ValueError(f"Required Wordle lexicon is missing or empty; see Installation in README.md: {word_list}")
         word_key = "PLAYPEN_VALID_WORDS_FILE" if phase_name == "C" else "PLAYPEN_WORDLE_VALID_WORDS_FILE"
         env[word_key] = str(word_list)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")

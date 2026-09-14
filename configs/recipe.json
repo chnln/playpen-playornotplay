@@ -1,5 +1,5 @@
 {
-  "description": "Effective training recipe. Training configuration: docs/MODEL_CARD.md. Methodology, data construction and reproducibility: https://arxiv.org/abs/2608.28458v1.",
+  "description": "Training recipe for the submitted model (phases A, B1, B2 and C; phase D packaging). Usage: README.md. Methodology: https://arxiv.org/abs/2608.28458v1.",
   "common_env": {
     "PLAYPEN_SEED": "42",
     "PLAYPEN_EVAL_RATIO": "0.05",

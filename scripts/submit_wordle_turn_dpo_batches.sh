@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Historical exploration entrypoint; not the submitted effective recipe.
+# Exploratory sweep launcher; not part of the submitted recipe.
 # Use scripts/submit_recipe_phase.py for phases A/B1/B2/C.
 set -euo pipefail
 
