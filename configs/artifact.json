@@ -1,0 +1,16 @@
+{
+  "repository": "chnln/Qwen3.5-2B-playpen-playornotplay",
+  "evaluated_revision": "828e356bc2f4bb4b200b533a49cc3094e1033fa0",
+  "format": "merged-fp32",
+  "eos_token_ids": [
+    248044,
+    248046
+  ],
+  "official_results_snapshot": "2dd5a53301ddca7fb3854af0847ca22962f5634d",
+  "official_scores": {
+    "public_clemscore": 38.92,
+    "public_statscore": 44.14,
+    "closed_id_clemscore": 41.17,
+    "closed_ood_clemscore": 7.88
+  }
+}

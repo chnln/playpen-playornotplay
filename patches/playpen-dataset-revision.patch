@@ -1,0 +1,12 @@
+--- a/playpen/cli.py
++++ b/playpen/cli.py
+@@ -121,7 +121,8 @@
+     suite_results_dir = results_dir / suite
+     if dataset_name is not None:
+         from datasets import load_dataset
+-        dataset = load_dataset("colab-potsdam/playpen-data", dataset_name, split="validation")
++        dataset_revision = os.getenv("PLAYPEN_DATASET_REVISION") or None
++        dataset = load_dataset("colab-potsdam/playpen-data", dataset_name, split="validation", revision=dataset_revision)
+         clem.run(game_selectors, [model_spec],
+                  gen_args=gen_args, results_dir_path=suite_results_dir, instances_filter=to_instances_filter(dataset))
+     for game_selector in game_selectors:

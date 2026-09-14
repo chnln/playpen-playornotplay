@@ -1,0 +1,6 @@
+# Interactive clembench game-tree revision used for development evaluation.
+# Upstream: https://github.com/clp-research/clembench
+# See docs/SETUP.md for installation and the accompanying static-suite overlay.
+
+ed3948604695b077d285654b73fcd8aae7a12bff
+# 2026-03-26 ed39486 update requirement clemcore>=3.7.0

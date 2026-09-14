@@ -1,0 +1,97 @@
+{
+  "description": "Effective training recipe. Training configuration: docs/MODEL_CARD.md. Methodology, data construction and reproducibility: https://arxiv.org/abs/2608.28458v1.",
+  "common_env": {
+    "PLAYPEN_SEED": "42",
+    "PLAYPEN_EVAL_RATIO": "0.05",
+    "PLAYPEN_NUM_TRAIN_EPOCHS": "1",
+    "PLAYPEN_LORA_R": "16",
+    "PLAYPEN_LORA_ALPHA": "32",
+    "PLAYPEN_LORA_DROPOUT": "0.05",
+    "PLAYPEN_USE_SEPARATE_REF_MODEL": "1",
+    "PLAYPEN_SAVE_STEPS": "50",
+    "PLAYPEN_EVAL_STEPS": "50",
+    "PLAYPEN_LOGGING_STEPS": "10",
+    "PLAYPEN_SAVE_TOTAL_LIMIT": "2"
+  },
+  "phases": {
+    "A": {
+      "trainer": "trainers/qwen35_2b_sft_lora.py",
+      "parent": null,
+      "time_limit": "03:00:00",
+      "env": {
+        "PLAYPEN_TRAIN_DATASET_REVISION": "cf23af92d58c76e91d4ca31e8c5055ae1f4ad011",
+        "PLAYPEN_SUCCESS_ONLY": "1",
+        "PLAYPEN_MAX_SAMPLES_PER_GAME": "700",
+        "PLAYPEN_BATCH_SIZE": "8",
+        "PLAYPEN_GRAD_ACCUM": "4",
+        "PLAYPEN_MAX_LENGTH": "2048",
+        "PLAYPEN_LR": "2e-4",
+        "PLAYPEN_GRADIENT_CHECKPOINTING": "1"
+      }
+    },
+    "B1": {
+      "trainer": "trainers/qwen35_2b_wordle_turn_dpo_lora.py",
+      "parent": "A",
+      "time_limit": "02:00:00",
+      "env": {
+        "PLAYPEN_TRAIN_DATASET_REVISION": "cf23af92d58c76e91d4ca31e8c5055ae1f4ad011",
+        "PLAYPEN_WORDLE_CLEAN_ONLY": "1",
+        "PLAYPEN_MIN_ASSISTANT_TURN": "2",
+        "PLAYPEN_REQUIRE_PREV_USER_SUBSTRING": "guess_feedback:",
+        "PLAYPEN_NEGATIVE_MODES": "repeat_last,bad_length",
+        "PLAYPEN_SAMPLE_ONE_NEGATIVE": "0",
+        "PLAYPEN_BATCH_SIZE": "1",
+        "PLAYPEN_GRAD_ACCUM": "16",
+        "PLAYPEN_MAX_LENGTH": "1024",
+        "PLAYPEN_LR": "5e-6",
+        "PLAYPEN_DPO_BETA": "0.1",
+        "PLAYPEN_GRADIENT_CHECKPOINTING": "0"
+      }
+    },
+    "B2": {
+      "trainer": "trainers/qwen35_2b_wordle_turn_dpo_lora.py",
+      "parent": "B1",
+      "time_limit": "02:00:00",
+      "env": {
+        "PLAYPEN_TRAIN_DATASET_REVISION": "cf23af92d58c76e91d4ca31e8c5055ae1f4ad011",
+        "PLAYPEN_WORDLE_CLEAN_ONLY": "1",
+        "PLAYPEN_MIN_ASSISTANT_TURN": "2",
+        "PLAYPEN_REQUIRE_PREV_USER_SUBSTRING": "guess_feedback:",
+        "PLAYPEN_NEGATIVE_MODES": "invalid_word,duplicate_guess_keyword",
+        "PLAYPEN_SAMPLE_ONE_NEGATIVE": "0",
+        "PLAYPEN_BATCH_SIZE": "1",
+        "PLAYPEN_GRAD_ACCUM": "16",
+        "PLAYPEN_MAX_LENGTH": "1024",
+        "PLAYPEN_LR": "5e-6",
+        "PLAYPEN_DPO_BETA": "0.1",
+        "PLAYPEN_GRADIENT_CHECKPOINTING": "0"
+      }
+    },
+    "C": {
+      "trainer": "trainers/qwen35_2b_wordle_branch_dpo_lora.py",
+      "parent": "B2",
+      "time_limit": "02:00:00",
+      "env": {
+        "PLAYPEN_TRAIN_DATASET_REVISION": "557d8cafd1bc4557bc22803a6d4502ef53fb664c",
+        "PLAYPEN_BATCH_SIZE": "1",
+        "PLAYPEN_GRAD_ACCUM": "16",
+        "PLAYPEN_MAX_LENGTH": "1024",
+        "PLAYPEN_LR": "5e-6",
+        "PLAYPEN_DPO_BETA": "0.2",
+        "PLAYPEN_GRADIENT_CHECKPOINTING": "1",
+        "PLAYPEN_PLAYER_NAME": "Player 1",
+        "PLAYPEN_MAX_INSTANCES": "27",
+        "PLAYPEN_BRANCHING_FACTOR": "2",
+        "PLAYPEN_MIN_ROUND": "1",
+        "PLAYPEN_MAX_ROUND": "3",
+        "PLAYPEN_TEMPERATURE": "0.7",
+        "PLAYPEN_MAX_TOKENS": "256",
+        "PLAYPEN_REQUIRE_VALID_CHOSEN": "0",
+        "PLAYPEN_REQUIRE_VALID_REJECTED": "0",
+        "PLAYPEN_REQUIRE_DISTINCT_REPLY": "0",
+        "PLAYPEN_MIN_SCORE_GAP": "0"
+      }
+    }
+  },
+  "packaging": {"lora_delta_scale": 0.85, "dtype": "float32", "eos_token_ids": [248044, 248046]}
+}
