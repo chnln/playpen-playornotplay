@@ -73,8 +73,11 @@ class SubmissionTests(unittest.TestCase):
                 command, env = submit.prepare(phase, self.parent, {})
                 self.assertTrue(Path(command[2]).is_file())
                 self.assertEqual(env["PLAYPEN_QWEN_PEFT_ADAPTER_PATH"], str(self.parent))
-                key = "PLAYPEN_VALID_WORDS_FILE" if phase == "C" else "PLAYPEN_WORDLE_VALID_WORDS_FILE"
-                self.assertEqual(env[key], str(self.lexicon))
+                if phase == "B2":
+                    self.assertEqual(env["PLAYPEN_WORDLE_VALID_WORDS_FILE"], str(self.lexicon))
+                else:
+                    self.assertNotIn("PLAYPEN_WORDLE_VALID_WORDS_FILE", env)
+                    self.assertNotIn("PLAYPEN_VALID_WORDS_FILE", env)
                 resolved = context.resolve_trainer_path(self.root, self.root / "environment/playpen", command[2])
                 self.assertTrue(Path(resolved).is_file())
 
@@ -82,6 +85,9 @@ class SubmissionTests(unittest.TestCase):
         self.lexicon.unlink()
         with self.assertRaisesRegex(ValueError, "lexicon"):
             submit.prepare("B2", self.parent, {})
+        for phase in ["B1", "C"]:
+            with self.subTest(phase=phase):
+                submit.prepare(phase, self.parent, {"PLAYPEN_VALID_WORDS_FILE": "/old/words.txt"})
 
     def test_branch_phase_saves_pairs_without_export_only_flag(self):
         _, env = submit.prepare("C", self.parent, {"PLAYPEN_DUMP_BRANCH_PAIRS": "/old/dump",

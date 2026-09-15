@@ -35,12 +35,12 @@ def prepare(phase_name: str, parent: Path | None, inherited: dict[str, str], tim
     env = {k: v for k, v in inherited.items() if not k.startswith("PLAYPEN_") or k in KEEP_PLAYPEN_ENV}
     env.update(recipe["common_env"])
     env.update(phase["env"])
-    if phase_name != "A":
+    # Only phase B2 uses the Wordle lexicon, for invalid-word negatives.
+    if phase_name == "B2":
         word_list = ROOT / "environment/playpen/clembench/wordle/resources/target_words/en/official_recognized_words.txt"
         if not word_list.is_file() or not word_list.read_text().strip():
             raise ValueError(f"Required Wordle lexicon is missing or empty; see Installation in README.md: {word_list}")
-        word_key = "PLAYPEN_VALID_WORDS_FILE" if phase_name == "C" else "PLAYPEN_WORDLE_VALID_WORDS_FILE"
-        env[word_key] = str(word_list)
+        env["PLAYPEN_WORDLE_VALID_WORDS_FILE"] = str(word_list)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     env["WANDB_PROJECT"] = inherited.get("WANDB_PROJECT") or "playpen-wordle"
     env["WANDB_RUN_NAME"] = f"playornotplay-{phase_name}-{stamp}"
@@ -51,7 +51,7 @@ def prepare(phase_name: str, parent: Path | None, inherited: dict[str, str], tim
     if phase_name == "C":
         records = ROOT / "artifacts" / f"branch-{stamp}"
         env["PLAYPEN_BRANCH_RECORDS_DIR"] = str(records / "trajectories")
-        # Save future realizations; this does not recreate the unsaved original corpus.
+        # Keep the generated preference pairs next to the branch records.
         env["PLAYPEN_SAVE_BRANCH_PAIRS"] = str(records / "pairs.jsonl.gz")
 
     command = ["bash", str(ROOT / "scripts/submit_playpen_train.sh"), str(trainer), learner,

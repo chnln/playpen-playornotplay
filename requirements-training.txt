@@ -1,5 +1,5 @@
-# Direct dependency pins from the recorded runtime family, using clemcore 3.7.2.
-# This is not a complete lock of the historical GPU environment; see README.md.
+# Direct dependency pins for training and evaluation.
+# Transitive dependencies and CUDA are not locked; see README.md.
 clemcore[huggingface]==3.7.2
 torch==2.6.0
 torchvision==0.21.0

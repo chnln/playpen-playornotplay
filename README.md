@@ -85,7 +85,7 @@ git -C environment/playpen/clembench checkout ed3948604695b077d285654b73fcd8aae7
 git -C environment/playpen/clembench restore \
   --source b716d279ae70befc988bffff2fb1499ccc81866a --worktree -- static
 
-# Wordle guess list used by phases B and C (12,953 words)
+# Wordle guess list used to build phase-B2 negatives (12,953 words)
 curl -L -o environment/playpen/clembench/wordle/resources/target_words/en/official_recognized_words.txt \
   https://raw.githubusercontent.com/3b1b/videos/b1ad11dfb3d38a9f5d3f1c9e4548208be51e1b96/_2022/wordle/data/allowed_words.txt
 echo "786dd7405eedf985eefada40d7d5ab21894785cfd5ca2c559687d3388cd6a527  environment/playpen/clembench/wordle/resources/target_words/en/official_recognized_words.txt" \
@@ -98,6 +98,10 @@ uv pip install --python environment/playpen/venv_repro/bin/python \
   -r environment/playpen/clembench/requirements.txt \
   -e 'environment/playpen[trl]'
 ```
+
+Phase B2 uses the Wordle guess list
+([`allowed_words.txt` from 3b1b/videos at commit `b1ad11d`](https://github.com/3b1b/videos/blob/b1ad11dfb3d38a9f5d3f1c9e4548208be51e1b96/_2022/wordle/data/allowed_words.txt))
+to construct invalid-word negatives.
 
 [requirements-training.txt](requirements-training.txt) pins the direct
 dependencies of our training environment (torch 2.6.0, transformers 5.4.0,
@@ -152,9 +156,8 @@ pinned to revision `cf23af92` for phases A, B1 and B2 and `557d8caf` for
 phase C.
 
 Phase C saves its generated pairs to `artifacts/branch-<timestamp>/pairs.jsonl.gz`
-before training on them. The pair file from the original Phase-C run was not
-retained. Pair generation samples at temperature 0.7, so regenerated pairs vary
-between runs and retraining is not expected to reproduce the released weights
+before training on them. Pair generation samples at temperature 0.7, so pairs
+vary between runs and retraining will not reproduce the released weights
 exactly.
 
 Phase D needs no GPU training. Scale the **unscaled** Phase-C adapter once, then
@@ -226,8 +229,10 @@ own terms and is not bundled:
 - [Qwen3.5-2B](https://huggingface.co/Qwen/Qwen3.5-2B) base weights and
   [playpen-data](https://huggingface.co/datasets/colab-potsdam/playpen-data):
   downloaded from Hugging Face under their own terms.
-- The Wordle guess list is downloaded from
-  [3b1b/videos](https://github.com/3b1b/videos) during installation.
+- The [Wordle guess list](https://github.com/3b1b/videos/blob/b1ad11dfb3d38a9f5d3f1c9e4548208be51e1b96/_2022/wordle/data/allowed_words.txt)
+  is downloaded during installation from
+  [3b1b/videos](https://github.com/3b1b/videos), whose contents are licensed
+  under CC BY-NC-SA 4.0; it is not redistributed here.
 
 ## Citation
 

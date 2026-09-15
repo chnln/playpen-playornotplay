@@ -981,7 +981,7 @@ class Qwen35WordleBranchDpoTrainer(BasePlaypenTrainer):
                         f.write(json.dumps(dict(row)) + "\n")
                 print(f"Dumped {len(preference_dataset)} preference pairs to {dump_path}")
                 if dump_pairs_path:
-                    return  # Historical dump-only mode; SAVE continues into DPO below.
+                    return  # Dump-only mode; SAVE continues into DPO below.
 
         output_dir = Path(env_str("PLAYPEN_OUTPUT_DIR", f"models/dpo+lora/{self.learner.name}"))
         output_dir.mkdir(parents=True, exist_ok=True)
