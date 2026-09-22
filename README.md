@@ -1,5 +1,8 @@
 # playornotplay — Playpen shared-task code
 
+[![arXiv](https://img.shields.io/badge/arXiv-2608.28458-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2608.28458v1)
+[![Hugging Face Paper](https://img.shields.io/badge/%F0%9F%A4%97-Hugging%20Face%20Paper-FFD21E)](https://huggingface.co/papers/2608.28458)
+
 We fine-tuned **Qwen3.5-2B** for interactive dialogue-game play in the LM
 Playschool Challenge / Playpen shared task (EMNLP 2026 Workshop). Training
 combines broad supervised fine-tuning, two Wordle turn-DPO passes and Wordle
